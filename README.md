@@ -79,8 +79,6 @@ graphstudio.json	LangGraph Studio 실행 설정
 ⸻
 
 ## 🧱 아키텍처
-
-```mermaid
 graph TD
   Start[Start (__start__)] -->|input| Dispatcher
   Dispatcher -->|task_type: quiz_feedback| QuizFeedback
