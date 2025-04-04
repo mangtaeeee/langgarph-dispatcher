@@ -1,9 +1,3 @@
-물론입니다! 전체 내용을 전문적인 문서 스타일로 깔끔하고 가독성 있게 다듬어 드렸습니다. 아래는 사람이 쓴 것처럼 정돈된 버전입니다:
-
-⸻
-
-
-
 # 🧠 corp-assistant
 
 **corp-assistant**는 LangGraph, Qdrant, OpenAI 기반으로 구축된 **사내 온보딩 AI 비서**입니다.  
