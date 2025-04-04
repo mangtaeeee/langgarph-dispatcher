@@ -1,39 +1,44 @@
+물론입니다! 전체 내용을 전문적인 문서 스타일로 깔끔하고 가독성 있게 다듬어 드렸습니다. 아래는 사람이 쓴 것처럼 정돈된 버전입니다:
+
+⸻
+
+
+
 # 🧠 corp-assistant
 
-이 프로젝트는 **LangGraph + Qdrant + OpenAI** 기반으로 사내 온보딩을 자동화하는 AI 비서입니다.  
-**온보딩 퀴즈 채점**, **사내 문서 요약**, **개인 맞춤 소개**를 하나의 흐름으로 구성하고  
-**LangGraph Studio**를 통해 시각화 및 실행할 수 있도록 설계되었습니다.
-
+**corp-assistant**는 LangGraph, Qdrant, OpenAI 기반으로 구축된 **사내 온보딩 AI 비서**입니다.  
+온보딩 퀴즈 평가, 사내 문서 요약, 개인화된 서비스 소개를 하나의 흐름으로 구성하며,  
+**LangGraph Studio**를 통해 구조를 시각화하고 직접 실행할 수 있도록 설계되었습니다.
 
 ---
 
-## 📌 주요 기능
+## ✨ 주요 기능
 
-### 1. 회사/서비스 이해
-- **입력**: 사용자의 프로필 정보
-- **처리**: 회사 소개 문서, 제품 정보 등을 기반으로 요약 및 개인화
-- **출력**: 직무 맞춤형 설명 제공
+### 🔹 1. 회사/서비스 이해
+- **입력**: 사용자 프로필 정보
+- **처리**: 회사 소개, 제품 정보, 핵심 가치 등을 바탕으로 직무에 맞게 요약
+- **출력**: 개인화된 설명 (개발자/비개발자 구분)
 
-### 2. 온보딩 퀴즈 평가
-- **입력**: 사용자의 퀴즈 답변
-- **처리**: 사내 정보 기반 퀴즈 생성 → LLM 채점 → 피드백
-- **출력**: 점수, 강점, 보완할 점
+### 🔹 2. 온보딩 퀴즈 평가
+- **입력**: 퀴즈 정답
+- **처리**: 사내 문서 기반 퀴즈 생성 → LLM 채점 → 상세 피드백 생성
+- **출력**: 점수, 강점, 보완할 점 등
 
-### 3. 사내 규정 안내
-- **입력**: 프로필 + 질문
-- **처리**: 문서 요약 + RAG 기반 Q&A
-- **출력**: 요약된 직무 맞춤형 규정 설명
+### 🔹 3. 사내 규정 안내
+- **입력**: 사용자 프로필 + 질문
+- **처리**: 긴 규정 문서 요약 및 RAG 기반 Q&A 처리
+- **출력**: 직무 맞춤형 규정 설명
 
 ---
 
 ## ▶️ 실행 방법
 
-### Poetry 기반 로컬 실행
+### 🧪 로컬 실행 (Poetry)
 
 ```bash
 PYTHONPATH=src poetry run python src/corp_assistant/run_quiz.py
 
-입력 예시
+입력 예시:
 
 {
   "input": {
@@ -47,9 +52,9 @@ PYTHONPATH=src poetry run python src/corp_assistant/run_quiz.py
 
 ⸻
 
-🧪 LangGraph Studio 사용법
-	•	graphstudio.json 파일을 기반으로 Studio에서 불러올 수 있습니다.
-	•	입력은 State 탭에 아래와 같이 작성:
+🧱 LangGraph Studio 실행
+	1.	graphstudio.json 파일을 기반으로 Studio에서 프로젝트를 불러옵니다.
+	2.	Start 노드의 State 탭에 아래 형식으로 입력하세요:
 
 {
   "input": {
@@ -59,43 +64,52 @@ PYTHONPATH=src poetry run python src/corp_assistant/run_quiz.py
   }
 }
 
-❗ 정답 입력이 없을 경우 Studio에서는 ValueError를 통해 안내합니다.
+⚠️ 정답(answer) 미입력 시, Studio 환경에서는 ValueError를 통해 안내됩니다.
 
 ⸻
 
-🧱 구성 파일 구조
+📁 파일 구성
 
-파일 경로	설명
-graph.py	LangGraph StateGraph 정의
-dispatcher.py	목적 분류 LLM 노드
-quiz_feedback.py	퀴즈 수행 및 피드백 노드
-summary_guide.py	사내 문서 요약 + Q&A 노드
-personalized_intro.py	개인화된 회사 설명 노드
-rag.py	Qdrant 연결 및 벡터스토어 설정
-run_quiz.py	로컬 실행용 엔트리포인트
-graphstudio.json	LangGraph Studio 실행 설정
+파일명	설명
+graph.py	LangGraph 플로우 정의
+dispatcher.py	사용자의 요청 목적을 분류하는 LLM 노드
+quiz_feedback.py	퀴즈 문제 노출, 정답 입력, LLM 채점 및 피드백 생성
+summary_guide.py	사내 문서 요약 및 Q&A 처리
+personalized_intro.py	직무별 개인화된 회사/서비스 소개 생성
+rag.py	Qdrant 기반 RAG 구성 및 벡터스토어 연결
+run_quiz.py	로컬 실행을 위한 엔트리포인트
+graphstudio.json	LangGraph Studio용 설정 파일
+
 
 
 ⸻
 
-## 🧱 아키텍처
+🧭 흐름도 (Flow)
+
 graph TD
-  Start[Start (__start__)] -->|input| Dispatcher
-  Dispatcher -->|task_type: quiz_feedback| QuizFeedback
-  Dispatcher -->|task_type: summary_guide| SummaryGuide
-  Dispatcher -->|task_type: personalized_intro| PersonalizedIntro
+  Start[__start__] -->|input| Dispatcher
+  Dispatcher -->|quiz_feedback| QuizFeedback
+  Dispatcher -->|summary_guide| SummaryGuide
+  Dispatcher -->|personalized_intro| PersonalizedIntro
   QuizFeedback --> End
   SummaryGuide --> End
   PersonalizedIntro --> End
 
 
+
 ⸻
 
-✅ 개발 상태
-	•	LangGraph 기반 흐름 구성
-	•	Qdrant 벡터스토어 연동
-	•	LangGraph Studio 시각화 및 실행 확인
-	•	입력 기반 분기 처리
-	•	고도화된 피드백 및 퀴즈 재도전 기능 추가 예정
+🚧 개발 상태
+	•	✅ LangGraph 기반 흐름 구성
+	•	✅ Qdrant 벡터스토어 연동 및 다중 컬렉션 지원
+	•	✅ LangGraph Studio 시각화 및 실행 테스트 완료
+	•	✅ 입력 기반 분기 처리 완비
+	•	⏳ 고도화된 피드백 및 퀴즈 재도전 기능 개발 예정
+
+⸻
+
+📌 GitHub 업로드 시 참고
+	•	루트에 README.md, graphstudio.json 포함
+	•	.env 없이도 실행 가능하게 host.docker.internal 자동 분기 처리
 
 ⸻
