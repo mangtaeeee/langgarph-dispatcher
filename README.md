@@ -108,6 +108,5 @@ graph TD
 
 ⸻
 
-<img width="570" alt="스크린샷 2025-04-04 오전 10 25 13" src="https://github.com/user-attachments/assets/867c93e2-0b47-4245-b67f-a3559ce6519c" />
 
 
